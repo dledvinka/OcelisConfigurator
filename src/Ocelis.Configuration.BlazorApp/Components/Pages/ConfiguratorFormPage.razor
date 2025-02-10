@@ -1,0 +1,145 @@
+﻿@page "/configurator-form"
+@inject ISnackbar Snackbar
+@using System.ComponentModel.DataAnnotations
+@using Ocelis.Configuration.BlazorApp.Components.Shared
+
+<EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+
+        <MudItem xs="12" md="5" Class="d-flex justify-center align-center" Style="height:500px;">
+            @if (_model.RoofType.Id == (int)RoofType.Flat)
+            {
+                <MudImage ObjectFit="ObjectFit.Fill" Src="images/RoofType_Flat.png" Alt="Rovný typ střechy" Class="rounded-lg" />
+            }
+            else
+            {
+                <MudImage ObjectFit="ObjectFit.Fill" Src="images/RoofType_Pointy.png" Alt="Špičatý typ střechy" Class="rounded-lg" />
+            }
+        </MudItem>
+
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudNumericField Label="Rozměr A v milimetrech" 
+                                     Margin="Margin.Normal"
+                                     @bind-Value="_model.DimensionA" 
+                                     @bind-Value:after="OnInputChanged"
+                                     For="() => _model.DimensionA" />
+                    <MudNumericField Label="Rozměr B v milimetrech" 
+                                     Margin="Margin.Normal"
+                                     @bind-Value="_model.DimensionB" 
+                                     @bind-Value:after="OnInputChanged" 
+                                     For="() => _model.DimensionB" />
+                    <MudNumericField Label="Rozměr C v milimetrech" 
+                                     Margin="Margin.Normal"
+                                     @bind-Value="_model.DimensionC" 
+                                     @bind-Value:after="OnInputChanged" 
+                                     For="() => _model.DimensionC" />
+
+                    <MudSelect @bind-Value="_model.RoofType"
+                               @bind-Value:after="OnInputChanged" 
+                               Label="Typ střechy" 
+                               Margin="Margin.Normal">
+                        @foreach (var dropDownItem in _roofTypeItems)
+                        {
+                            <MudSelectItem Value="@dropDownItem">@dropDownItem.DisplayText</MudSelectItem>
+                        }
+                    </MudSelect>
+                    
+                    <br />
+
+                    <span>
+                        <h2>Odhad výsledné ceny:</h2>
+                        <MudText>@_priceEstimate.ToString("C0")</MudText>
+                    </span>
+
+                    <br />
+                    <br />
+                    <br />
+
+                    <h2>Zanechte nám na sebe kontakt</h2>
+
+                    <MudTextField Label="Telefon" Margin="Margin.Normal"
+                    @bind-Value="_model.PhoneNumber" For="@(() => _model.PhoneNumber)" />
+                    <MudTextField Label="E-mail" Margin="Margin.Normal"
+                    @bind-Value="_model.Email" For="@(() => _model.Email)" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Size="Size.Large">
+                        <MudText>Zaslat kontakt, ozveme se</MudText>
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code {
+
+    bool success;
+    decimal _priceEstimate = 0.0m;
+
+    private void OnInputChanged()
+    {
+        _priceEstimate = _model.DimensionA * _model.DimensionB * _model.DimensionC * _model.RoofType.Id / 1000;
+    }
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        StateHasChanged();
+        Snackbar.Add("Děkujeme, Vaše poptávka byla úspěšně odeslána. Náš obchodní zástupce se Vám brzy ozve.", Severity.Success);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        OnInputChanged();
+    }
+
+    private static readonly List<DropDownItem> _roofTypeItems = new List<DropDownItem>
+    {
+        new((int)RoofType.Flat, "Rovná"),
+        new((int)RoofType.Pointy, "Do špice")
+    };
+
+    private readonly ConfiguratorFormInputData _model = ConfiguratorFormInputData.Default;
+
+    public enum RoofType
+    {
+        Unknown,
+        Flat,
+        Pointy
+    }
+
+    public class ConfiguratorFormInputData
+    {
+        public static ConfiguratorFormInputData Default =>
+            new()
+                {
+                    DimensionA = 1000,
+                    DimensionB = 1000,
+                    DimensionC = 1000,
+                    RoofType = _roofTypeItems.First(),
+                    PhoneNumber = "+420123456789",
+                    Email = "muj.email@seznam.cz"
+                };
+
+        [Required]
+        public decimal DimensionA { get; set; }
+
+        [Required]
+        public decimal DimensionB { get; set; }
+
+        [Required]
+        public decimal DimensionC { get; set; }
+
+        [Required] public DropDownItem RoofType { get; set; }
+
+        [Required(ErrorMessage = "Prosím vyplňte telefonní číslo")] public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Prosím vyplňte email")] public string Email { get; set; }
+    }
+}
