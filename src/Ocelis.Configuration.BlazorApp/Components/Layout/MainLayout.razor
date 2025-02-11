@@ -5,16 +5,13 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudLayout>
+    @* <MudText Class="mt-16 pa-4">TEST</MudText> *@
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+        <MudImage Src="\images\ocelis.svg"></MudImage>
+        <MudSpacer/>
+        <MudText Typo="Typo.h4" Class="ml-5" Style="font-weight:700">Konfigurátor ocelových konstrukcí</MudText>
     </MudAppBar>
-    <MudDrawer id="nav-drawer" @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu />
-    </MudDrawer>
+
     <MudMainContent Class="mt-16 pa-4">
         @Body
     </MudMainContent>
@@ -46,16 +43,16 @@
     }
 
     private readonly Typography _typography = new Typography()
-    {
-        Default = new DefaultTypography()
         {
-            FontFamily = new[]
+            Default = new DefaultTypography()
             {
+                FontFamily = new[]
+                {
                 "Figtree", "Helvetica", "Arial", "sans-serif"
             },
-            FontWeight = "800"
-        }
-    };
+                FontWeight = "800"
+            }
+        };
 
     private void DrawerToggle()
     {

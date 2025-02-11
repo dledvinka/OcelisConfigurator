@@ -1,3 +1,4 @@
+using MudBlazor;
 using MudBlazor.Services;
 using Ocelis.Configuration.BlazorApp.Components;
 

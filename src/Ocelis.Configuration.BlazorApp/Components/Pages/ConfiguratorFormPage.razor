@@ -1,16 +1,18 @@
 ﻿@page "/configurator-form"
 @inject ISnackbar Snackbar
 @using System.ComponentModel.DataAnnotations
+@using System.Globalization
 @using Ocelis.Configuration.BlazorApp.Components.Shared
 
 <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
 
-        <MudItem xs="12" md="5" Class="d-flex justify-center align-center" Style="height:500px;">
+        <MudItem xs="12" md="6" Class="d-flex justify-center align-center" >
             @if (_model.RoofType.Id == (int)RoofType.Flat)
             {
-                <MudImage ObjectFit="ObjectFit.Fill" Src="images/RoofType_Flat.png" Alt="Rovný typ střechy" Class="rounded-lg" />
+                @* <MudImage ObjectFit="ObjectFit.Fill" Src="images/RoofType_Flat.png" Alt="Rovný typ střechy" Class="rounded-lg" /> *@
+                <MudImage ObjectFit="ObjectFit.Fill" Src="images/image-455-2-768x763.png" Alt="Rovný typ střechy" Class="rounded-lg" />
             }
             else
             {
@@ -18,55 +20,59 @@
             }
         </MudItem>
 
-        <MudItem xs="12" sm="7">
+        <MudItem xs="12" sm="6">
             <MudCard>
                 <MudCardContent>
-                    <MudNumericField Label="Rozměr A v milimetrech" 
+                    
+                    <h2>Zadejte požadované rozměry a typ střechy</h2>
+
+                    <MudNumericField Label="Rozměr A v milimetrech"
                                      Margin="Margin.Normal"
-                                     @bind-Value="_model.DimensionA" 
+                                     @bind-Value="_model.DimensionA"
                                      @bind-Value:after="OnInputChanged"
-                                     For="() => _model.DimensionA" />
-                    <MudNumericField Label="Rozměr B v milimetrech" 
+                                     For="() => _model.DimensionA"/>
+                    <MudNumericField Label="Rozměr B v milimetrech"
                                      Margin="Margin.Normal"
-                                     @bind-Value="_model.DimensionB" 
-                                     @bind-Value:after="OnInputChanged" 
-                                     For="() => _model.DimensionB" />
-                    <MudNumericField Label="Rozměr C v milimetrech" 
+                                     @bind-Value="_model.DimensionB"
+                                     @bind-Value:after="OnInputChanged"
+                                     For="() => _model.DimensionB"/>
+                    <MudNumericField Label="Rozměr C v milimetrech"
                                      Margin="Margin.Normal"
-                                     @bind-Value="_model.DimensionC" 
-                                     @bind-Value:after="OnInputChanged" 
-                                     For="() => _model.DimensionC" />
+                                     @bind-Value="_model.DimensionC"
+                                     @bind-Value:after="OnInputChanged"
+                                     For="() => _model.DimensionC"/>
 
                     <MudSelect @bind-Value="_model.RoofType"
-                               @bind-Value:after="OnInputChanged" 
-                               Label="Typ střechy" 
+                               @bind-Value:after="OnInputChanged"
+                               Label="Typ střechy"
                                Margin="Margin.Normal">
                         @foreach (var dropDownItem in _roofTypeItems)
                         {
                             <MudSelectItem Value="@dropDownItem">@dropDownItem.DisplayText</MudSelectItem>
                         }
                     </MudSelect>
-                    
-                    <br />
+
+                    <br/>
+                    <br/>
 
                     <span>
                         <h2>Odhad výsledné ceny:</h2>
-                        <MudText>@_priceEstimate.ToString("C0")</MudText>
+                        <MudText>@_priceEstimate.ToString("C0", _cultureInfo)</MudText>
                     </span>
 
-                    <br />
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
+                    <br/>
 
                     <h2>Zanechte nám na sebe kontakt</h2>
 
                     <MudTextField Label="Telefon" Margin="Margin.Normal"
-                    @bind-Value="_model.PhoneNumber" For="@(() => _model.PhoneNumber)" />
+                                  @bind-Value="_model.PhoneNumber" For="@(() => _model.PhoneNumber)"/>
                     <MudTextField Label="E-mail" Margin="Margin.Normal"
-                    @bind-Value="_model.Email" For="@(() => _model.Email)" />
+                                  @bind-Value="_model.Email" For="@(() => _model.Email)"/>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Size="Size.Large">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Size="Size.Large" Style="height: 40px; border-radius: 0;">
                         <MudText>Zaslat kontakt, ozveme se</MudText>
                     </MudButton>
                 </MudCardActions>
@@ -79,6 +85,7 @@
 
     bool success;
     decimal _priceEstimate = 0.0m;
+    CultureInfo _cultureInfo = new CultureInfo("cs-CZ");
 
     private void OnInputChanged()
     {
