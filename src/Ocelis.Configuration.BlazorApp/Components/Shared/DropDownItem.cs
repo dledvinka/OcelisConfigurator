@@ -1,3 +1,7 @@
 ﻿namespace Ocelis.Configuration.BlazorApp.Components.Shared;
 
-public record DropDownItem(int Id, string DisplayText);
+public record DropDownItem(int Id, string DisplayText)
+{
+    public override string ToString() => DisplayText;
+}
+
