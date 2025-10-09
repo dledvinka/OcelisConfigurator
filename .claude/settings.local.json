@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(dotnet run:*)",
+      "Bash(dotnet build:*)"
     ],
     "deny": [],
     "ask": []
