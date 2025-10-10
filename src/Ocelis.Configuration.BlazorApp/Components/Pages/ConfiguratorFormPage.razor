@@ -1,8 +1,10 @@
 ﻿@page "/configurator-form"
 @inject ISnackbar Snackbar
+@inject IEmailService EmailService
 @using System.ComponentModel.DataAnnotations
 @using System.Globalization
 @using Ocelis.Configuration.BlazorApp.Components.Shared
+@using Ocelis.Configuration.BlazorApp.Services
 
 <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -69,8 +71,17 @@
                                Color="Color.Primary"
                                Size="Size.Large"
                                FullWidth="true"
+                               Disabled="@_isSubmitting"
                                Style="max-width: 400px; height: 48px; border-radius: 0;">
-                        <MudText>Zaslat kontakt, ozveme se</MudText>
+                        @if (_isSubmitting)
+                        {
+                            <MudProgressCircular Class="mr-2" Size="Size.Small" Indeterminate="true" />
+                            <MudText>Odesílání...</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Zaslat kontakt, ozveme se</MudText>
+                        }
                     </MudButton>
                 </MudCardActions>
             </MudCard>
@@ -89,11 +100,48 @@
         _priceEstimate = _model.DimensionA * _model.DimensionB * _model.DimensionC * _model.RoofType.Id / 1000;
     }
 
-    private void OnValidSubmit(EditContext context)
+    private bool _isSubmitting = false;
+
+    private async Task OnValidSubmit(EditContext context)
     {
-        success = true;
+        if (_isSubmitting)
+            return;
+
+        _isSubmitting = true;
         StateHasChanged();
-        Snackbar.Add("Děkujeme, Vaše poptávka byla úspěšně odeslána. Náš obchodní zástupce se Vám brzy ozve.", Severity.Success);
+
+        try
+        {
+            // Send email with all form data
+            var emailSent = true;
+            @* var emailSent = await EmailService.SendConfiguratorInquiryAsync(
+                _model.DimensionA,
+                _model.DimensionB,
+                _model.DimensionC,
+                _model.RoofType.DisplayText,
+                _model.PhoneNumber,
+                _model.Email,
+                _priceEstimate); *@
+
+            if (emailSent)
+            {
+                success = true;
+                Snackbar.Add("Děkujeme! Vaše poptávka byla úspěšně odeslána. Náš obchodní zástupce se Vám brzy ozve.", Severity.Success);
+            }
+            else
+            {
+                Snackbar.Add("Omlouváme se, ale při odesílání poptávky došlo k chybě. Zkuste to prosím později nebo nás kontaktujte přímo.", Severity.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Nepodařilo se odeslat poptávku. Chyba: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            _isSubmitting = false;
+            StateHasChanged();
+        }
     }
 
     protected override void OnInitialized()

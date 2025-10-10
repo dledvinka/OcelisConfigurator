@@ -1,11 +1,15 @@
 using MudBlazor;
 using MudBlazor.Services;
 using Ocelis.Configuration.BlazorApp.Components;
+using Ocelis.Configuration.BlazorApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add MudBlazor services
 builder.Services.AddMudServices();
+
+// Add Email service
+builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
