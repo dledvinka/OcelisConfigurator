@@ -1,6 +1,7 @@
-1. Obrázky - grafiku na stránku. Ideálně 1 obrázek produktu s šikmou střechou a jeden s rovnou střechou. Ideálně 800x800px. Doplnit telefonické kontakt a email.
+1. Dodat obsah - Obrázky - grafiku na stránku. Ideálně 1 obrázek produktu s šikmou střechou a jeden s rovnou střechou. Ideálně 800x800px.
 
-2. Excel s výpočty. Excel jako formát není úplně vhodný. Pokud to půjde, bude to převádět do jiného formátu. Jak často se bude Excel s výpočty měnit.
+2. Dodat Excel s výpočty. Excel jako formát není úplně vhodný. Pokud to půjde, bude to převádět do jiného formátu vhodnějšího pro použití aplikace. Načítání Excelu by mohlo aplikaci zpomalovat.
+Jak často se bude Excel s výpočty měnit?
 
 3. Maily budeme posílat přes SMTP server Ocelis?
 Pokud ano, potřebuju tyto hodnoty:
@@ -18,9 +19,9 @@ Pokud ano, potřebuju tyto hodnoty:
 }
 
 3. Kde se to bude hostovat?
-Začněme s tímto - Nejjednodušší varianta - Můžu to nahostovat v cloudu (Azure), dá se tam pak dopojit jejich doména. Je tam možnost zdarma - můžem to zkusit, ale může to být pomalé. Pro tento scénář by to mohlo stačit.
-Výhody - je to jednoduché a můžu to sprvovat vzdáleně.
-Pokud by to bylo pomalé, musíme přejít na silnější server - minimální cena (nejmenší výkon je 13.14USD bez DPH / month). 
+Začněme s tímto - nejjednodušší varianta - Můžu to nahostovat v cloudu (Azure), dá se tam pak dopojit jejich doména. Výhody - je to jednoduché a můžu to spravovat vzdáleně.
+Nejlevější možnost 13.14USD bez DPH / měsíc.
+Je tam možnost zdarma, ale tam se aplikace uspává. První spuštění je velmi pomalé., pro nás nepoužitelné.
 
 Pokud si to budou chtít hostovat u sebe tak jak? V případě problému nebudu schopen řešit na dálku. Nebudu schopen na dálku nasadit novou verzi.
 a. Windows Server - poskytnu výstup ve formě .NET 9 webové aplikace - musí si sami nasadit na IIS. Poskytnu kdyžtak nějaké instrukce. 
