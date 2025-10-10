@@ -36,7 +36,7 @@ public class SmtpEmailService : IEmailService
             var smtpPassword = _configuration["Email:SmtpPassword"];
             var fromEmail = _configuration["Email:FromEmail"]
                 ?? throw new InvalidOperationException("FromEmail is not configured");
-            var fromName = _configuration["Email:FromName"] ?? "Ocelis Konfigurátor";
+            var fromName = _configuration["Email:FromName"] ?? "OCELIS Konfigurátor";
             var toEmail = _configuration["Email:ToEmail"]
                 ?? throw new InvalidOperationException("ToEmail (recipient) is not configured");
             var enableSsl = bool.Parse(_configuration["Email:EnableSsl"] ?? "true");
