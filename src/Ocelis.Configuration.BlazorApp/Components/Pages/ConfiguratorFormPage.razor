@@ -13,12 +13,11 @@
         <MudItem xs="12" md="6" Class="d-flex justify-center align-center" >
             @if (_model.RoofType.Id == (int)RoofType.Flat)
             {
-                @* <MudImage ObjectFit="ObjectFit.Cover" Src="images/RoofType_Flat.png" Alt="Rovný typ střechy" Class="rounded-lg" Style="width: 100%; height: auto; max-width: 600px; max-height: 600px;" /> *@
-                <MudImage ObjectFit="ObjectFit.Cover" Src="images/image-455-2-768x763.png" Alt="Rovný typ střechy" Class="rounded-lg" Style="width: 100%; height: auto; max-width: 600px; max-height: 600px;" />
+                <MudImage ObjectFit="ObjectFit.Cover" Src="images/RovnaStrecha_600_600.jpg" Alt="Rovný typ střechy" Class="rounded-lg" Style="width: 100%; height: 682px; max-width: 682px; max-height: 682px;" />
             }
             else
             {
-                <MudImage ObjectFit="ObjectFit.Cover" Src="images/RoofType_Pointy.png" Alt="Špičatý typ střechy" Class="rounded-lg" Style="width: 100%; height: auto; max-width: 600px; max-height: 600px;" />
+                <MudImage ObjectFit="ObjectFit.Cover" Src="images/SedlovaStrecha_600_600.jpg" Alt="Sedlový typ střechy" Class="rounded-lg" Style="width: 100%; height: 682px; max-width: 682px; max-height: 682px;" />
             }
         </MudItem>
 
@@ -154,7 +153,7 @@
     private static readonly List<DropDownItem> _roofTypeItems = new List<DropDownItem>
     {
         new((int)RoofType.Flat, "Rovná"),
-        new((int)RoofType.Pointy, "Do špice")
+        new((int)RoofType.Pitched, "Sedlová")
     };
 
     private readonly ConfiguratorFormInputData _model = ConfiguratorFormInputData.Default;
@@ -163,7 +162,7 @@
     {
         Unknown,
         Flat,
-        Pointy
+        Pitched
     }
 
     public class ConfiguratorFormInputData
