@@ -1,7 +1,15 @@
 1. Dodat obsah - Obrázky - grafiku na stránku. Ideálně 1 obrázek produktu s šikmou střechou a jeden s rovnou střechou. Ideálně 800x800px.
 
+* 
+Pojmy - rovná / sedlová?  Plochá, Sedlová 15 a Sedlová 35, Sedlová 45
+
+rozměry - délka, šířka, výška? 
+Jednotky - metry?
+
 2. Dodat Excel s výpočty. Excel jako formát není úplně vhodný. Pokud to půjde, bude to převádět do jiného formátu vhodnějšího pro použití aplikace. Načítání Excelu by mohlo aplikaci zpomalovat.
 Jak často se bude Excel s výpočty měnit?
+
+
 
 3. Maily budeme posílat přes SMTP server Ocelis?
 Pokud ano, potřebuju tyto hodnoty:
