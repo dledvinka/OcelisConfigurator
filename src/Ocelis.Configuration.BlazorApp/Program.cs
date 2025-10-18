@@ -11,11 +11,19 @@ builder.Services.AddMudServices();
 // Add Email service
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
+// Add Pricing services
+builder.Services.AddSingleton<PricingConfiguration>();
+builder.Services.AddScoped<PricingCalculationService>();
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 var app = builder.Build();
+
+// Load pricing configuration at startup
+var pricingConfig = app.Services.GetRequiredService<PricingConfiguration>();
+await pricingConfig.LoadAsync();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
