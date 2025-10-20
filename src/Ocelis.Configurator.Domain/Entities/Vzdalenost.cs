@@ -29,6 +29,8 @@ public sealed class Vzdalenost : IComparable<Vzdalenost>, IEquatable<Vzdalenost>
     public static Vzdalenost FromMetry(double metry) => new(metry * 1000);
 
     public static Vzdalenost operator *(double multiplier, Vzdalenost vzdalenost) => FromMilimetry(multiplier * vzdalenost.Milimetry);
+    
+    public static Vzdalenost operator *(Vzdalenost multiplier, Vzdalenost vzdalenost) => FromMilimetry(multiplier.Milimetry * vzdalenost.Milimetry);
 
     public static double operator /(Vzdalenost a, Vzdalenost b) => a.Milimetry / b.Milimetry;
 

@@ -3,6 +3,7 @@
 using System.Globalization;
 using CsvHelper;
 using Ocelis.Configuration.Domain.Entities;
+using Ocelis.Configuration.Domain.Enums;
 
 public class VaznikMaterialyReader
 {
@@ -13,8 +14,12 @@ public class VaznikMaterialyReader
         readerConfiguration.HasHeaderRecord = true;
         readerConfiguration.Delimiter = ";";
         using var csv = new CsvReader(reader, readerConfiguration, false);
-        var records = csv.GetRecords<VaznikMaterialCsvColumn>().ToList();
-        
-        return new List<VaznikMaterial>();
+        var csvRows = csv.GetRecords<VaznikMaterialCsvRow>();
+
+        var vaznikMaterialy = csvRows.Select(x => new VaznikMaterial(Enum.Parse<StavbaTyp>(x.StavbaTyp), Enum.Parse<VaznikTyp>(x.VaznikyTyp),
+                                                      Vzdalenost.FromMetry(x.SirkaMinMetry), Vzdalenost.FromMetry(x.SirkaMaxMetry), x.Kod,
+                                                      Hmotnost.FromKilogramy(x.HmotnostKg))).ToList();
+
+        return vaznikMaterialy;
     }
 }

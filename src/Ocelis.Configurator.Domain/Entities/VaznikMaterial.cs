@@ -2,4 +2,4 @@
 
 using Ocelis.Configuration.Domain.Enums;
 
-public record VaznikMaterial(StavbaTyp StavbaTyp, VaznikTyp VaznikTyp, Vzdalenost DelkaMin, Vzdalenost DelkaMax, string Kod, Hmotnost Hmotnost);
+public record VaznikMaterial(StavbaTyp StavbaTyp, VaznikTyp VaznikTyp, Vzdalenost SirkaMin, Vzdalenost SirkaMax, string Kod, Hmotnost Hmotnost);

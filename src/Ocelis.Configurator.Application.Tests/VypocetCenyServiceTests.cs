@@ -8,6 +8,9 @@ using Ocelis.Configurator.Application.Materialy;
 
 public class Tests
 {
+    private readonly Cenik _cenik = new Cenik(150, 15, 120);
+    private readonly List<VaznikMaterial>  _vaznikMaterialy = new VaznikMaterialyReader().Read("Data/Materialy.csv");
+    
     [SetUp]
     public void Setup()
     {
@@ -16,13 +19,10 @@ public class Tests
     [Test]
     public void VypocetCenyTest_Plochy_RD_JednaMistnost_5x8m_CenaSouhlasi()
     {
-        var cenikTest = new Cenik(150, 15, 120);
-        
-        var zakazkaTest = GetDefaultZakazka(cenikTest, StavbaTyp.RodinnyDum, VaznikTyp.Plochy);
+        var zakazkaTest = GetDefaultZakazka(_cenik, StavbaTyp.RodinnyDum, VaznikTyp.Plochy);
         zakazkaTest.PocetVelkychOtvoru = 2;
 
-        var vaznikMaterialy = new VaznikMaterialyReader().Read("Data/Materialy.csv");
-        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(344700);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(231500);
@@ -36,16 +36,13 @@ public class Tests
     [Test]
     public void VypocetCenyTest_SedlovySklon15_RD_JednaMistnost_6x6m_CenaSouhlasi()
     {
-        var cenikTest = new Cenik(150, 15, 120);
-        
-        var zakazkaTest = GetDefaultZakazka(cenikTest, StavbaTyp.RodinnyDum, VaznikTyp.SedlovySklon15);
+        var zakazkaTest = GetDefaultZakazka(_cenik, StavbaTyp.RodinnyDum, VaznikTyp.SedlovySklon15);
         zakazkaTest.Delka = Vzdalenost.FromMetry(6);
         zakazkaTest.Sirka = Vzdalenost.FromMetry(6);
         zakazkaTest.PocetVelkychOtvoru = 4;
         zakazkaTest.SvetlaVyskaSten = Vzdalenost.FromMetry(3.2);
 
-        var vaznikMaterialy = new List<VaznikMaterial>();
-        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(352700);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(238400);
@@ -59,16 +56,13 @@ public class Tests
     [Test]
     public void VypocetCenyTest_SedlovySklon35_RD_JednaMistnost_6x7m_CenaSouhlasi()
     {
-        var cenikTest = new Cenik(150, 15, 120);
-        
-        var zakazkaTest = GetDefaultZakazka(cenikTest, StavbaTyp.RodinnyDum, VaznikTyp.SedlovySklon15);
+        var zakazkaTest = GetDefaultZakazka(_cenik, StavbaTyp.RodinnyDum, VaznikTyp.SedlovySklon15);
         zakazkaTest.Delka = Vzdalenost.FromMetry(6);
         zakazkaTest.Sirka = Vzdalenost.FromMetry(7);
         zakazkaTest.PocetVelkychOtvoru = 4;
         zakazkaTest.SvetlaVyskaSten = Vzdalenost.FromMetry(2.8);
 
-        var vaznikMaterialy = new List<VaznikMaterial>();
-        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(410800);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(289000);
@@ -82,16 +76,13 @@ public class Tests
     [Test]
     public void VypocetCenyTest_SedlovySklon45_RD_JednaMistnost_6x7m_CenaSouhlasi()
     {
-        var cenikTest = new Cenik(150, 15, 120);
-        
-        var zakazkaTest = GetDefaultZakazka(cenikTest, StavbaTyp.RodinnyDum, VaznikTyp.SedlovySklon15);
+        var zakazkaTest = GetDefaultZakazka(_cenik, StavbaTyp.RodinnyDum, VaznikTyp.SedlovySklon15);
         zakazkaTest.Delka = Vzdalenost.FromMetry(7);
         zakazkaTest.Sirka = Vzdalenost.FromMetry(7);
         zakazkaTest.PocetVelkychOtvoru = 4;
         zakazkaTest.SvetlaVyskaSten = Vzdalenost.FromMetry(2.9);
 
-        var vaznikMaterialy = new List<VaznikMaterial>();
-        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(502700);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(368900);
@@ -102,7 +93,7 @@ public class Tests
         cena.CenaSpojovaciMaterialCzk.Should().Be(18500);
     }
 
-    private static Zakazka GetDefaultZakazka(Cenik cenikTest, StavbaTyp stavbaTyp, VaznikTyp vaznikTyp) =>
+    private static Zakazka GetDefaultZakazka(Cenik cenik, StavbaTyp stavbaTyp, VaznikTyp vaznikTyp) =>
         new()
         {
             StavbaTyp = stavbaTyp,
@@ -116,6 +107,6 @@ public class Tests
             {
                 new Mistnost("A", Vzdalenost.FromMetry(5), Vzdalenost.FromMetry(8))
             },
-            Cenik = cenikTest
+            Cenik = cenik
         };
 }
