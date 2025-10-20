@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <RootNamespace>Ocelis.Configuration.Domain.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +23,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Ocelis.Configuration.Domain\Ocelis.Configuration.Domain.csproj" />
+      <ProjectReference Include="..\Ocelis.Configurator.Application\Ocelis.Configurator.Application.csproj" />
+      <ProjectReference Include="..\Ocelis.Configurator.Domain\Ocelis.Configurator.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\docs\Materialy.csv">
+        <Link>Data\Materialy.csv</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

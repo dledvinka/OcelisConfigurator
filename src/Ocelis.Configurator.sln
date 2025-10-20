@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelis.Configuration.BlazorApp", "Ocelis.Configuration.BlazorApp\Ocelis.Configuration.BlazorApp.csproj", "{B8FB2F78-C49A-489C-B366-268E17E3F687}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelis.Configurator.BlazorApp", "Ocelis.Configurator.BlazorApp\Ocelis.Configurator.BlazorApp.csproj", "{B8FB2F78-C49A-489C-B366-268E17E3F687}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelis.Configuration.Domain", "Ocelis.Configuration.Domain\Ocelis.Configuration.Domain.csproj", "{438B9FFB-14EA-454C-A5E8-2664BCA02E0E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelis.Configurator.Domain", "Ocelis.Configurator.Domain\Ocelis.Configurator.Domain.csproj", "{438B9FFB-14EA-454C-A5E8-2664BCA02E0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelis.Configuration.Domain.Tests", "Ocelis.Configuration.Domain.Tests\Ocelis.Configuration.Domain.Tests.csproj", "{61B4F53D-53CE-4019-8C34-DD7AEBB2AEA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelis.Configurator.Application.Tests", "Ocelis.Configurator.Application.Tests\Ocelis.Configurator.Application.Tests.csproj", "{61B4F53D-53CE-4019-8C34-DD7AEBB2AEA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelis.Configurator.Application", "Ocelis.Configurator.Application\Ocelis.Configurator.Application.csproj", "{8E53C28F-5B50-481A-8620-E31A5CFBDD12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{61B4F53D-53CE-4019-8C34-DD7AEBB2AEA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61B4F53D-53CE-4019-8C34-DD7AEBB2AEA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61B4F53D-53CE-4019-8C34-DD7AEBB2AEA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E53C28F-5B50-481A-8620-E31A5CFBDD12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E53C28F-5B50-481A-8620-E31A5CFBDD12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E53C28F-5B50-481A-8620-E31A5CFBDD12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E53C28F-5B50-481A-8620-E31A5CFBDD12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

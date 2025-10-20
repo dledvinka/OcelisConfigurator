@@ -3,7 +3,8 @@
 using FluentAssertions;
 using Ocelis.Configuration.Domain.Entities;
 using Ocelis.Configuration.Domain.Enums;
-using Ocelis.Configuration.Domain.Services;
+using Ocelis.Configurator.Application.Logic;
+using Ocelis.Configurator.Application.Materialy;
 
 public class Tests
 {
@@ -20,8 +21,8 @@ public class Tests
         var zakazkaTest = GetDefaultZakazka(cenikTest, StavbaTyp.RodinnyDum, VaznikTyp.Plochy);
         zakazkaTest.PocetVelkychOtvoru = 2;
 
-        var vaznikMaterialy = new List<VaznikMaterial>();
-        var cena = new VypocetCenyService(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var vaznikMaterialy = new VaznikMaterialyReader().Read("Data/Materialy.csv");
+        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(344700);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(231500);
@@ -44,7 +45,7 @@ public class Tests
         zakazkaTest.SvetlaVyskaSten = Vzdalenost.FromMetry(3.2);
 
         var vaznikMaterialy = new List<VaznikMaterial>();
-        var cena = new VypocetCenyService(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(352700);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(238400);
@@ -67,7 +68,7 @@ public class Tests
         zakazkaTest.SvetlaVyskaSten = Vzdalenost.FromMetry(2.8);
 
         var vaznikMaterialy = new List<VaznikMaterial>();
-        var cena = new VypocetCenyService(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(410800);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(289000);
@@ -90,7 +91,7 @@ public class Tests
         zakazkaTest.SvetlaVyskaSten = Vzdalenost.FromMetry(2.9);
 
         var vaznikMaterialy = new List<VaznikMaterial>();
-        var cena = new VypocetCenyService(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(vaznikMaterialy).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().Be(502700);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().Be(368900);

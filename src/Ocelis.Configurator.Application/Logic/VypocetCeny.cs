@@ -1,12 +1,12 @@
-﻿namespace Ocelis.Configuration.Domain.Services;
+﻿namespace Ocelis.Configurator.Application.Logic;
 
 using Ocelis.Configuration.Domain.Entities;
 
-public class VypocetCenyService
+public class VypocetCeny
 {
     private readonly List<VaznikMaterial> _vaznikMaterialy;
 
-    public VypocetCenyService(IEnumerable<VaznikMaterial> vaznikMaterialy)
+    public VypocetCeny(IEnumerable<VaznikMaterial> vaznikMaterialy)
     {
         _vaznikMaterialy = vaznikMaterialy.ToList();
     }
