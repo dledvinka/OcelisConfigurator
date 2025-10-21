@@ -25,7 +25,10 @@ public class VypocetCeny
 
         foreach (var mistnost in zakazka.Mistnosti)
         {
-            vaznikyHmotnostKg += GetVaznikyHmotnostKg(mistnost.Delka, koeficientRoztece, koeficientMaterialu, zakazka.StavbaTyp, mistnost.Sirka, zakazka.VaznikTyp);
+            // pro výpočet vazníku je kratší vzdalenost považovaná za šířku, delší za délku
+            var mistnostSirkaProVaznik = Vzdalenost.FromMetry(Math.Max(mistnost.Sirka.Metry, mistnost.Delka.Metry));
+            var mistnostDelkaProVaznik = Vzdalenost.FromMetry(Math.Min(mistnost.Sirka.Metry, mistnost.Delka.Metry));
+            vaznikyHmotnostKg += GetVaznikyHmotnostKg(mistnostDelkaProVaznik, koeficientRoztece, koeficientMaterialu, zakazka.StavbaTyp, mistnostSirkaProVaznik, zakazka.VaznikTyp);
         }
 
         var silnoStennaOcelHmotnostKg = zakazka.PocetVelkychOtvoru * 8 * 20.4;
