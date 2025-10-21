@@ -10,7 +10,7 @@ public class Tests
 {
     private readonly Cenik _cenik = new Cenik(150, 15, 120);
     private readonly decimal _decimalValuePrecision = 1000.0m;
-    private readonly List<VaznikMaterial>  _vaznikMaterialy = new VaznikMaterialyReader().Read("Data/Materialy.csv");
+    private readonly List<VaznikMaterial>  _vaznikMaterialy = new VaznikMaterialyReader().ReadAsync("Data/Materialy.csv").GetAwaiter().GetResult();
     
     [SetUp]
     public void Setup()

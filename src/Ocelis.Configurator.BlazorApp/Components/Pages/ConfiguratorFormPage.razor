@@ -1,56 +1,88 @@
 ﻿@page "/configurator-form"
 @inject ISnackbar Snackbar
 @inject IEmailService EmailService
+@inject VaznikMaterialyReader VaznikMaterialyReader
+@inject CenikReader CenikReader
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
 @using System.Globalization
 @using Ocelis.Configuration.BlazorApp.Components.Shared
 @using Ocelis.Configuration.BlazorApp.Services
+@using Ocelis.Configuration.Domain.Entities
+@using Ocelis.Configuration.Domain.Enums
+@using Ocelis.Configurator.Application.Cenik
+@using Ocelis.Configurator.Application.Logic
+@using Ocelis.Configurator.Application.Materialy
 
 <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
 
         <MudItem xs="12" md="6" Class="d-flex justify-center align-center" >
-            @if (_model.RoofType.Id == (int)RoofType.Flat)
+            @if (_model.StavbaTyp.Id == (int)VaznikTyp.Plochy)
             {
                 <MudImage ObjectFit="ObjectFit.Cover" Src="images/RovnaStrecha_600_600.jpg" Alt="Rovný typ střechy" Class="rounded-lg" Style="width: 100%; height: 682px; max-width: 682px; max-height: 682px;" />
             }
             else
             {
-                <MudImage ObjectFit="ObjectFit.Cover" Src="images/SedlovaStrecha_600_600.jpg" Alt="Sedlový typ střechy" Class="rounded-lg" Style="width: 100%; height: 682px; max-width: 682px; max-height: 682px;" />
+                <MudImage ObjectFit="ObjectFit.Cover" Src="images/SedlovaStrecha_600_600.jpg" Alt="Šikmý typ střechy" Class="rounded-lg" Style="width: 100%; height: 682px; max-width: 682px; max-height: 682px;" />
             }
         </MudItem>
 
         <MudItem xs="12" md="6">
             <MudCard>
                 <MudCardContent>
-                    <MudText Typo="Typo.h5" Class="mb-4">Zadejte požadované rozměry a typ střechy</MudText>
-
-                    <MudNumericField Label="Rozměr A v milimetrech"
-                                     Margin="Margin.Normal"
-                                     @bind-Value="_model.DimensionA"
-                                     @bind-Value:after="OnInputChanged"
-                                     For="() => _model.DimensionA"/>
-                    <MudNumericField Label="Rozměr B v milimetrech"
-                                     Margin="Margin.Normal"
-                                     @bind-Value="_model.DimensionB"
-                                     @bind-Value:after="OnInputChanged"
-                                     For="() => _model.DimensionB"/>
-                    <MudNumericField Label="Rozměr C v milimetrech"
-                                     Margin="Margin.Normal"
-                                     @bind-Value="_model.DimensionC"
-                                     @bind-Value:after="OnInputChanged"
-                                     For="() => _model.DimensionC"/>
-
-                    <MudSelect @bind-Value="_model.RoofType"
+                    <MudText Typo="Typo.h5" Class="mb-4">Zadejte požadované rozměry, typ stavby a sklon střechy</MudText>
+                    
+                    <MudSelect @bind-Value="_model.StavbaTyp"
                                @bind-Value:after="OnInputChanged"
-                               Label="Typ střechy"
+                               Label="Typ stavby"
                                Margin="Margin.Normal">
-                        @foreach (var dropDownItem in _roofTypeItems)
+                        @foreach (var dropDownItem in _stavbaTypItems)
                         {
                             <MudSelectItem Value="@dropDownItem">@dropDownItem.DisplayText</MudSelectItem>
                         }
                     </MudSelect>
+                    
+                    <MudSelect @bind-Value="_model.VaznikTyp"
+                               @bind-Value:after="OnInputChanged"
+                               Label="Sklon střechy"
+                               Margin="Margin.Normal">
+                        @foreach (var dropDownItem in _vaznikTypItems)
+                        {
+                            <MudSelectItem Value="@dropDownItem">@dropDownItem.DisplayText</MudSelectItem>
+                        }
+                    </MudSelect>
+                    
+                    <MudNumericField Label="Počet otvorů větším než 2m²"
+                                     Margin="Margin.Normal"
+                                     Min="0"
+                                     @bind-Value="_model.PocetVelkychOtvoru"
+                                     @bind-Value:after="OnInputChanged"
+                                     For="() => _model.PocetVelkychOtvoru"/>
+
+                    <MudNumericField Label="Délka stavby v metrech"
+                                     Margin="Margin.Normal"
+                                     Min="1.0m"
+                                     Step="0.1m"
+                                     @bind-Value="_model.DelkaStavbyVMetrech"
+                                     @bind-Value:after="OnInputChanged"
+                                     For="() => _model.DelkaStavbyVMetrech"/>
+                    <MudNumericField Label="Šířka stavby v metrech"
+                                     Margin="Margin.Normal"
+                                     Min="1.0m"
+                                     Step="0.1m"
+                                     @bind-Value="_model.SirkaStavbyVMetrech"
+                                     @bind-Value:after="OnInputChanged"
+                                     For="() => _model.SirkaStavbyVMetrech"/>
+                    <MudNumericField Label="Světlá výška stěn v metrech"
+                                     Min="1.0m"
+                                     Step="0.1m"
+                                     Margin="Margin.Normal"
+                                     @bind-Value="_model.SvetlaVyskaStenVMetrech"
+                                     @bind-Value:after="OnInputChanged"
+                                     For="() => _model.SvetlaVyskaStenVMetrech"/>
 
                     <div class="mt-6 mb-6">
                         <MudText Typo="Typo.h5" GutterBottom="true">Odhad výsledné ceny:</MudText>
@@ -96,7 +128,32 @@
 
     private void OnInputChanged()
     {
-        _priceEstimate = _model.DimensionA * _model.DimensionB * _model.DimensionC * _model.RoofType.Id / 1000;
+        var vypocetCeny = new VypocetCeny(_vaznikMaterialy, _cenik);
+
+        var zakazka = new Zakazka()
+        {
+            StavbaTyp = (StavbaTyp)_model.StavbaTyp.Id,
+            VaznikTyp = (VaznikTyp)_model.VaznikTyp.Id,
+            Delka = Vzdalenost.FromMetry((double)_model.DelkaStavbyVMetrech),
+            Sirka = Vzdalenost.FromMetry((double)_model.SirkaStavbyVMetrech),
+            SvetlaVyskaSten = Vzdalenost.FromMetry((double)_model.SvetlaVyskaStenVMetrech),
+            Cenik = _cenik,
+            CProfilTyp = CProfilTyp.C89x41x1_0,
+            PocetVelkychOtvoru = _model.PocetVelkychOtvoru,
+
+        };
+
+        var delkaVazniku = Math.Min(zakazka.Delka.Metry, zakazka.Sirka.Metry);
+        var sirkaVazniku = Math.Max(zakazka.Delka.Metry, zakazka.Sirka.Metry);
+
+        zakazka.Mistnosti = new List<Mistnost>()
+        {
+            new Mistnost("A", Vzdalenost.FromMetry(delkaVazniku), Vzdalenost.FromMetry(sirkaVazniku))
+        };
+
+        var zakazkaCena = vypocetCeny.VypoctiCenuZakazky(zakazka);
+        
+        _priceEstimate = zakazkaCena.CenaCelkemCzk;
     }
 
     private bool _isSubmitting = false;
@@ -143,54 +200,66 @@
         }
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        var uri = NavigationManager.ToAbsoluteUri("data/Materialy.csv");
+        var csvFileStream = await HttpClient.GetStreamAsync(uri);
+        _vaznikMaterialy = await VaznikMaterialyReader.ReadAsync(csvFileStream);
+        _cenik = CenikReader.GetCenik();
 
         OnInputChanged();
     }
 
-    private static readonly List<DropDownItem> _roofTypeItems = new List<DropDownItem>
+    private static readonly List<DropDownItem> _stavbaTypItems = new List<DropDownItem>
     {
-        new((int)RoofType.Flat, "Rovná"),
-        new((int)RoofType.Pitched, "Sedlová")
+        new((int)StavbaTyp.RodinnyDum, "Rodinný dům"),
+        new((int)StavbaTyp.Vestavek, "Vestavek")
+    };
+    
+    private static readonly List<DropDownItem> _vaznikTypItems = new List<DropDownItem>
+    {
+        new((int)VaznikTyp.Plochy, "Plochý"),
+        new((int)VaznikTyp.SedlovySklon15, "Sedlová sklon 15°"),
+        new((int)VaznikTyp.SedlovySklon35, "Sedlová sklon 35°"),
+        new((int)VaznikTyp.SedlovySklon45, "Sedlová sklon 45°"),
     };
 
     private readonly ConfiguratorFormInputData _model = ConfiguratorFormInputData.Default;
-
-    public enum RoofType
-    {
-        Unknown,
-        Flat,
-        Pitched
-    }
+    private List<VaznikMaterial> _vaznikMaterialy;
+    private Cenik _cenik;
 
     public class ConfiguratorFormInputData
     {
         public static ConfiguratorFormInputData Default =>
             new()
                 {
-                    DimensionA = 1000,
-                    DimensionB = 1000,
-                    DimensionC = 1000,
-                    RoofType = _roofTypeItems.First(),
+                    DelkaStavbyVMetrech = 5,
+                    SirkaStavbyVMetrech = 8,
+                    SvetlaVyskaStenVMetrech = 3,
+                    StavbaTyp = _stavbaTypItems.First(),
+                    VaznikTyp = _vaznikTypItems.First(),
+                    PocetVelkychOtvoru = 4,
                     PhoneNumber = "+420123456789",
                     Email = "muj.email@seznam.cz"
                 };
 
-        [Required]
-        public decimal DimensionA { get; set; }
+        public DropDownItem VaznikTyp { get; set; }
 
         [Required]
-        public decimal DimensionB { get; set; }
+        public decimal DelkaStavbyVMetrech { get; set; }
 
         [Required]
-        public decimal DimensionC { get; set; }
+        public decimal SirkaStavbyVMetrech { get; set; }
 
-        [Required] public DropDownItem RoofType { get; set; }
+        [Required]
+        public decimal SvetlaVyskaStenVMetrech { get; set; }
+
+        [Required] public DropDownItem StavbaTyp { get; set; }
 
         [Required(ErrorMessage = "Prosím vyplňte telefonní číslo")] public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Prosím vyplňte email")] public string Email { get; set; }
+        
+        public int PocetVelkychOtvoru { get; set; }
     }
 }
