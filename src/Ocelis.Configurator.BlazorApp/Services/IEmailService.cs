@@ -1,13 +1,9 @@
 namespace Ocelis.Configuration.BlazorApp.Services;
 
+using Ocelis.Configuration.BlazorApp.Domain;
+
 public interface IEmailService
 {
-    Task<bool> SendConfiguratorInquiryAsync(
-        decimal dimensionA,
-        decimal dimensionB,
-        decimal dimensionC,
-        string roofType,
-        string phoneNumber,
-        string email,
-        decimal priceEstimate);
+    Task<bool> SendEmailAsync(string toEmailName, EmailMessageModel messageModel);
+    bool IsValidEmail(string emailName);
 }

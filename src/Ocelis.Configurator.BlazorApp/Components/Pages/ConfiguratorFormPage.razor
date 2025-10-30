@@ -5,9 +5,11 @@
 @inject CenikReader CenikReader
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
+@inject ILoggerFactory LoggerFactory
 @using System.ComponentModel.DataAnnotations
 @using System.Globalization
 @using Ocelis.Configuration.BlazorApp.Components.Shared
+@using Ocelis.Configuration.BlazorApp.Domain
 @using Ocelis.Configuration.BlazorApp.Services
 @using Ocelis.Configuration.Domain.Entities
 @using Ocelis.Configuration.Domain.Enums
@@ -34,55 +36,55 @@
             <MudCard>
                 <MudCardContent>
                     <MudText Typo="Typo.h5" Class="mb-4">Zadejte požadované rozměry, typ stavby a sklon střechy</MudText>
-                    
+
                     <MudSelect @bind-Value="_model.StavbaTyp"
-                               @bind-Value:after="OnInputChanged"
-                               Label="Typ stavby"
-                               Margin="Margin.Normal">
+                    @bind-Value:after="OnInputChanged"
+                    Label="Typ stavby"
+                    Margin="Margin.Normal">
                         @foreach (var dropDownItem in _stavbaTypItems)
                         {
                             <MudSelectItem Value="@dropDownItem">@dropDownItem.DisplayText</MudSelectItem>
                         }
                     </MudSelect>
-                    
+
                     <MudSelect @bind-Value="_model.VaznikTyp"
-                               @bind-Value:after="OnInputChanged"
-                               Label="Sklon střechy"
-                               Margin="Margin.Normal">
+                    @bind-Value:after="OnInputChanged"
+                    Label="Sklon střechy"
+                    Margin="Margin.Normal">
                         @foreach (var dropDownItem in _vaznikTypItems)
                         {
                             <MudSelectItem Value="@dropDownItem">@dropDownItem.DisplayText</MudSelectItem>
                         }
                     </MudSelect>
-                    
+
                     <MudNumericField Label="Počet otvorů větším než 2m²"
-                                     Margin="Margin.Normal"
-                                     Min="0"
-                                     @bind-Value="_model.PocetVelkychOtvoru"
-                                     @bind-Value:after="OnInputChanged"
-                                     For="() => _model.PocetVelkychOtvoru"/>
+                    Margin="Margin.Normal"
+                    Min="0"
+                    @bind-Value="_model.PocetVelkychOtvoru"
+                    @bind-Value:after="OnInputChanged"
+                    For="() => _model.PocetVelkychOtvoru"/>
 
                     <MudNumericField Label="Délka stavby v metrech"
-                                     Margin="Margin.Normal"
-                                     Min="1.0m"
-                                     Step="0.1m"
-                                     @bind-Value="_model.DelkaStavbyVMetrech"
-                                     @bind-Value:after="OnInputChanged"
-                                     For="() => _model.DelkaStavbyVMetrech"/>
+                    Margin="Margin.Normal"
+                    Min="1.0m"
+                    Step="0.1m"
+                    @bind-Value="_model.DelkaStavbyVMetrech"
+                    @bind-Value:after="OnInputChanged"
+                    For="() => _model.DelkaStavbyVMetrech"/>
                     <MudNumericField Label="Šířka stavby v metrech"
-                                     Margin="Margin.Normal"
-                                     Min="1.0m"
-                                     Step="0.1m"
-                                     @bind-Value="_model.SirkaStavbyVMetrech"
-                                     @bind-Value:after="OnInputChanged"
-                                     For="() => _model.SirkaStavbyVMetrech"/>
+                    Margin="Margin.Normal"
+                    Min="1.0m"
+                    Step="0.1m"
+                    @bind-Value="_model.SirkaStavbyVMetrech"
+                    @bind-Value:after="OnInputChanged"
+                    For="() => _model.SirkaStavbyVMetrech"/>
                     <MudNumericField Label="Světlá výška stěn v metrech"
-                                     Min="1.0m"
-                                     Step="0.1m"
-                                     Margin="Margin.Normal"
-                                     @bind-Value="_model.SvetlaVyskaStenVMetrech"
-                                     @bind-Value:after="OnInputChanged"
-                                     For="() => _model.SvetlaVyskaStenVMetrech"/>
+                    Min="1.0m"
+                    Step="0.1m"
+                    Margin="Margin.Normal"
+                    @bind-Value="_model.SvetlaVyskaStenVMetrech"
+                    @bind-Value:after="OnInputChanged"
+                    For="() => _model.SvetlaVyskaStenVMetrech"/>
 
                     <div class="mt-6 mb-6">
                         <MudText Typo="Typo.h5" GutterBottom="true">Odhad výsledné ceny:</MudText>
@@ -92,18 +94,18 @@
                     <MudText Typo="Typo.h5" Class="mb-4">Zanechte nám na sebe kontakt</MudText>
 
                     <MudTextField Label="Telefon" Margin="Margin.Normal"
-                                  @bind-Value="_model.PhoneNumber" For="@(() => _model.PhoneNumber)"/>
+                    @bind-Value="_model.PhoneNumber" For="@(() => _model.PhoneNumber)"/>
                     <MudTextField Label="E-mail" Margin="Margin.Normal"
-                                  @bind-Value="_model.Email" For="@(() => _model.Email)"/>
+                    @bind-Value="_model.Email" For="@(() => _model.Email)"/>
                 </MudCardContent>
                 <MudCardActions Class="d-flex justify-end pa-4">
                     <MudButton ButtonType="ButtonType.Submit"
-                               Variant="Variant.Filled"
-                               Color="Color.Primary"
-                               Size="Size.Large"
-                               FullWidth="true"
-                               Disabled="@_isSubmitting"
-                               Style="max-width: 400px; height: 48px; border-radius: 0;">
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    Size="Size.Large"
+                    FullWidth="true"
+                    Disabled="@_isSubmitting"
+                    Style="max-width: 400px; height: 48px; border-radius: 0;">
                         @if (_isSubmitting)
                         {
                             <MudProgressCircular Class="mr-2" Size="Size.Small" Indeterminate="true" />
@@ -128,7 +130,7 @@
 
     private void OnInputChanged()
     {
-        var vypocetCeny = new VypocetCeny(_vaznikMaterialy, _cenik);
+        var vypocetCeny = new VypocetCeny(LoggerFactory.CreateLogger<VypocetCeny>(), _vaznikMaterialy, _cenik);
 
         var zakazka = new Zakazka()
         {
@@ -151,9 +153,18 @@
             new Mistnost("A", Vzdalenost.FromMetry(delkaVazniku), Vzdalenost.FromMetry(sirkaVazniku))
         };
 
-        var zakazkaCena = vypocetCeny.VypoctiCenuZakazky(zakazka);
+        _zakazka = zakazka;
+        _zakazkaCena = vypocetCeny.VypoctiCenuZakazky(zakazka);
+
+        if (_zakazkaCena.LzeVypocitat)
+        {
+            _priceEstimate = _zakazkaCena.CenaCelkemCzk.Value;
+        }
+        else
+        {
+            // TODO DL: show error message that price cannot be calculated
+        }
         
-        _priceEstimate = zakazkaCena.CenaCelkemCzk;
     }
 
     private bool _isSubmitting = false;
@@ -169,15 +180,13 @@
         try
         {
             // Send email with all form data
-            var emailSent = true;
-            @* var emailSent = await EmailService.SendConfiguratorInquiryAsync(
-                _model.DimensionA,
-                _model.DimensionB,
-                _model.DimensionC,
-                _model.RoofType.DisplayText,
-                _model.PhoneNumber,
-                _model.Email,
-                _priceEstimate); *@
+            var emailSent = await EmailService.SendEmailAsync(_model.Email, new EmailMessageModel()
+            {
+                CustomerEmail = _model.Email,
+                CustomerPhone = _model.PhoneNumber,
+                Zakazka = _zakazka,
+                ZakazkaCena = _zakazkaCena
+            });
 
             if (emailSent)
             {
@@ -227,6 +236,8 @@
     private readonly ConfiguratorFormInputData _model = ConfiguratorFormInputData.Default;
     private List<VaznikMaterial> _vaznikMaterialy;
     private Cenik _cenik;
+    private ZakazkaCena _zakazkaCena;
+    private Zakazka _zakazka;
 
     public class ConfiguratorFormInputData
     {

@@ -23,7 +23,7 @@ public class Tests
         var zakazkaTest = GetDefaultZakazka(_cenik, StavbaTyp.RodinnyDum, VaznikTyp.Plochy);
         zakazkaTest.PocetVelkychOtvoru = 2;
 
-        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(null, _vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().BeApproximately(249200, _decimalValuePrecision);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().BeApproximately(182500, _decimalValuePrecision);
@@ -47,7 +47,7 @@ public class Tests
             new Mistnost("A", Vzdalenost.FromMetry(6), Vzdalenost.FromMetry(6))
         };
 
-        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(null, _vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().BeApproximately(352700, _decimalValuePrecision);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().BeApproximately(238400, _decimalValuePrecision);
@@ -71,7 +71,7 @@ public class Tests
             new Mistnost("A", Vzdalenost.FromMetry(6), Vzdalenost.FromMetry(7))
         };
 
-        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(null, _vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().BeApproximately(410800, _decimalValuePrecision);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().BeApproximately(289000, _decimalValuePrecision);
@@ -95,7 +95,7 @@ public class Tests
             new Mistnost("A", Vzdalenost.FromMetry(7), Vzdalenost.FromMetry(7))
         };
 
-        var cena = new VypocetCeny(_vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
+        var cena = new VypocetCeny(null, _vaznikMaterialy, _cenik).VypoctiCenuZakazky(zakazkaTest);
 
         cena.CenaCelkemCzk.Should().BeApproximately(502700, _decimalValuePrecision);
         cena.CenaOcelovaKonstrukceOcelisCzk.Should().BeApproximately(368900, _decimalValuePrecision);

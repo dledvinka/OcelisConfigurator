@@ -1,50 +1,65 @@
 ﻿namespace Ocelis.Configurator.Application.Logic;
 
+using Microsoft.Extensions.Logging;
 using Ocelis.Configuration.Domain.Entities;
 using Ocelis.Configuration.Domain.Enums;
 
 public class VypocetCeny
 {
+    private readonly ILogger<VypocetCeny>? _logger;
     private readonly Cenik _cenik;
     private readonly List<VaznikMaterial> _vaznikMaterialy;
 
-    public VypocetCeny(IEnumerable<VaznikMaterial> vaznikMaterialy, Cenik cenik)
+    public VypocetCeny(ILogger<VypocetCeny>? logger, IEnumerable<VaznikMaterial> vaznikMaterialy, Cenik cenik)
     {
+        _logger = logger;
         _cenik = cenik;
         _vaznikMaterialy = vaznikMaterialy.ToList();
     }
     
     public ZakazkaCena VypoctiCenuZakazky(Zakazka zakazka)
     {
-        var koeficientRoztece = GetRoztec(zakazka.StavbaTyp);
-        var koeficientMaterialu = GetMaterial(zakazka.CProfilTyp);
-        var delkaSten = 2 * zakazka.Sirka + 2 * zakazka.Delka;
-        var stenyHmotnostKg = GetStenyHmotnostKg(koeficientRoztece, zakazka.SvetlaVyskaSten.Metry, delkaSten.Metry, koeficientMaterialu);
-
-        var vaznikyHmotnostKg = 0d;
-
-        foreach (var mistnost in zakazka.Mistnosti)
-        {
-            // pro výpočet vazníku je kratší vzdalenost považovaná za šířku, delší za délku
-            var mistnostSirkaProVaznik = Vzdalenost.FromMetry(Math.Max(mistnost.Sirka.Metry, mistnost.Delka.Metry));
-            var mistnostDelkaProVaznik = Vzdalenost.FromMetry(Math.Min(mistnost.Sirka.Metry, mistnost.Delka.Metry));
-            vaznikyHmotnostKg += GetVaznikyHmotnostKg(mistnostDelkaProVaznik, koeficientRoztece, koeficientMaterialu, zakazka.StavbaTyp, mistnostSirkaProVaznik, zakazka.VaznikTyp);
-        }
-
-        var silnoStennaOcelHmotnostKg = zakazka.PocetVelkychOtvoru * 8 * 20.4;
+        // TODO DL validace při výpočtu
         
-        var celkovaHmotnostKg = stenyHmotnostKg + vaznikyHmotnostKg + silnoStennaOcelHmotnostKg;
-        var cenaOcelovaKonstrukceOcelisCzk = (decimal)celkovaHmotnostKg * _cenik.CenaTenkostennaOcelZaKg;
-
-        return new ZakazkaCena()
+        try
         {
-            CenaOcelovaKonstrukceOcelisCzk = cenaOcelovaKonstrukceOcelisCzk,
-            CenaSilnostennaKonstrukceCzk = (decimal)silnoStennaOcelHmotnostKg * _cenik.CenaSilnostennaOcelZaKgCzk,
-            CenaMontazNaStavbeCzk = (decimal)celkovaHmotnostKg * _cenik.CenaMontazZaKgCzk,
-            CenaSpojovaciMaterialCzk = cenaOcelovaKonstrukceOcelisCzk * 0.05m,
-            CenaOplasteniCzk = 0,
-            CenaManipulacniTechnikaCzk = 0,
-        };
+            var koeficientRoztece = GetRoztec(zakazka.StavbaTyp);
+            var koeficientMaterialu = GetMaterial(zakazka.CProfilTyp);
+            var delkaSten = 2 * zakazka.Sirka + 2 * zakazka.Delka;
+            var stenyHmotnostKg = GetStenyHmotnostKg(koeficientRoztece, zakazka.SvetlaVyskaSten.Metry, delkaSten.Metry, koeficientMaterialu);
+
+            var vaznikyHmotnostKg = 0d;
+
+            foreach (var mistnost in zakazka.Mistnosti)
+            {
+                // pro výpočet vazníku je kratší vzdalenost považovaná za šířku, delší za délku
+                var mistnostSirkaProVaznik = Vzdalenost.FromMetry(Math.Max(mistnost.Sirka.Metry, mistnost.Delka.Metry));
+                var mistnostDelkaProVaznik = Vzdalenost.FromMetry(Math.Min(mistnost.Sirka.Metry, mistnost.Delka.Metry));
+                vaznikyHmotnostKg += GetVaznikyHmotnostKg(mistnostDelkaProVaznik, koeficientRoztece, koeficientMaterialu, zakazka.StavbaTyp, mistnostSirkaProVaznik, zakazka.VaznikTyp);
+            }
+
+            var silnoStennaOcelHmotnostKg = zakazka.PocetVelkychOtvoru * 8 * 20.4;
+
+            var celkovaHmotnostKg = stenyHmotnostKg + vaznikyHmotnostKg + silnoStennaOcelHmotnostKg;
+            var cenaOcelovaKonstrukceOcelisCzk = (decimal)celkovaHmotnostKg * _cenik.CenaTenkostennaOcelZaKg;
+
+            return new ZakazkaCena()
+            {
+                CenaOcelovaKonstrukceOcelisCzk = cenaOcelovaKonstrukceOcelisCzk,
+                CenaSilnostennaKonstrukceCzk = (decimal)silnoStennaOcelHmotnostKg * _cenik.CenaSilnostennaOcelZaKgCzk,
+                CenaMontazNaStavbeCzk = (decimal)celkovaHmotnostKg * _cenik.CenaMontazZaKgCzk,
+                CenaSpojovaciMaterialCzk = cenaOcelovaKonstrukceOcelisCzk * 0.05m,
+                CenaOplasteniCzk = 0,
+                CenaManipulacniTechnikaCzk = 0,
+                LzeVypocitat = true,
+                Popis = string.Empty
+            };
+        }
+        catch (Exception e)
+        {
+            _logger?.LogError(e, $"Chyba při výpočtu, zakázka {zakazka}");
+            return ZakazkaCena.NelzeVypocitat("Chyba při výpočtu ceny zakázky.");
+        }
     }
 
     private double GetVaznikyHmotnostKg(Vzdalenost mistnostDelka, double koeficientRoztece, double koeficientMaterialu, StavbaTyp zakazkaStavbaTyp,

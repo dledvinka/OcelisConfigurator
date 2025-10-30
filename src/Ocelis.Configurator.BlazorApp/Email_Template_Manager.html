@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #ff3938; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 0 0 5px 5px; }
+        .info-row { padding: 8px 0; border-bottom: 1px solid #ddd; }
+        .info-row:last-child { border-bottom: none; }
+        .label { font-weight: bold; color: #110e2d; display: inline-block; width: 200px; }
+        .value { color: #424242; }
+        .section { background-color: #fff; padding: 15px; margin: 15px 0; border-left: 4px solid #ff3938; border-radius: 3px; }
+        .price { font-size: 28px; color: #ff3938; font-weight: bold; margin: 20px 0; text-align: center; padding: 15px; background: #fff; border-radius: 5px; }
+        .footer { margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd; font-size: 12px; color: #666; text-align: center; }
+        h2 { color: #110e2d; border-bottom: 2px solid #ff3938; padding-bottom: 10px; margin-top: 20px; }
+        h3 { color: #ff3938; margin-top: 15px; margin-bottom: 10px; }
+        a { color: #ff3938; text-decoration: none; }
+        .error-message { background-color: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 3px; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1 style='margin: 0; font-size: 24px;'>📋 Nová poptávka z konfigurátoru</h1>
+            <p style='margin: 5px 0 0 0; font-size: 14px;'>Detailní informace pro manažera</p>
+        </div>
+
+        <div class='content'>
+            <h2>👤 Kontaktní údaje zákazníka</h2>
+            <div class='info-row'>
+                <span class='label'>Email:</span>
+                <span class='value'><a href='mailto:###CUSTOMEREMAIL###'>###CUSTOMEREMAIL###</a></span>
+            </div>
+            <div class='info-row'>
+                <span class='label'>Telefon:</span>
+                <span class='value'><a href='tel:###CUSTOMERPHONE###'>###CUSTOMERPHONE###</a></span>
+            </div>
+
+            <h2>🏗️ Parametry zakázky</h2>
+
+            <h3>Základní údaje</h3>
+            <div class='section'>
+                <div class='info-row'>
+                    <span class='label'>Typ stavby:</span>
+                    <span class='value'><strong>###STAVBATYP###</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Typ vazníku:</span>
+                    <span class='value'><strong>###VAZNIKTYP###</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Počet velkých otvorů:</span>
+                    <span class='value'><strong>###POCETVELKYCHOTVORU###</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>C-profil:</span>
+                    <span class='value'><strong>###CPROFILTYP###</strong></span>
+                </div>
+            </div>
+
+            <h3>Rozměry</h3>
+            <div class='section'>
+                <div class='info-row'>
+                    <span class='label'>Délka:</span>
+                    <span class='value'><strong>###DELKA### mm</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Šířka:</span>
+                    <span class='value'><strong>###SIRKA### mm</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Světlá výška stěn:</span>
+                    <span class='value'><strong>###SVETLAVYSKASTEM### mm</strong></span>
+                </div>
+            </div>
+
+            <h2>💰 Cenová kalkulace</h2>
+
+            <div class='section'>
+                <div class='info-row'>
+                    <span class='label'>Ocelová konstrukce OCELIS:</span>
+                    <span class='value'><strong>###CENAOCELOVAKONSTRUKCE### Kč</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Silnostěnná konstrukce:</span>
+                    <span class='value'><strong>###CENASILNOSTENNAKONSTRUKCE### Kč</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Oplastění:</span>
+                    <span class='value'><strong>###CENAOPLASTENI### Kč</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Montáž na stavbě:</span>
+                    <span class='value'><strong>###CENAMONTAZ### Kč</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Manipulační technika:</span>
+                    <span class='value'><strong>###CENAMANIPULACE### Kč</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Spojovací materiál:</span>
+                    <span class='value'><strong>###CENASPOJOVACI### Kč</strong></span>
+                </div>
+            </div>
+
+            <h3 style='text-align: center;'>Celková cena</h3>
+            <div class='price'>
+                ###CENACELKEM###
+            </div>
+
+            ###POPIS###
+
+            <div class='footer'>
+                <p>✉️ Tento email byl automaticky vygenerován z konfigurátoru ocelových konstrukcí.</p>
+                <p>💡 Pro odpověď zákazníkovi stačí kliknout na tlačítko 'Odpovědět' - email bude automaticky odeslán na <strong>###CUSTOMEREMAIL###</strong></p>
+                <p style='color: #999; margin-top: 15px;'>Datum odeslání: ###CURRENTDATE###</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

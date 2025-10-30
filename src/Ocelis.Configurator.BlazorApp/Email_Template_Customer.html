@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #ff3938; color: white; padding: 30px 20px; text-align: center; border-radius: 5px 5px 0 0; }
+        .content { background-color: #f9f9f9; padding: 20px; border: 1px solid #ddd; border-radius: 0 0 5px 5px; }
+        .info-row { padding: 10px 0; border-bottom: 1px solid #ddd; }
+        .info-row:last-child { border-bottom: none; }
+        .label { font-weight: bold; color: #110e2d; display: inline-block; width: 160px; }
+        .value { color: #424242; }
+        .section { background-color: #fff; padding: 15px; margin: 15px 0; border-left: 4px solid #ff3938; border-radius: 3px; }
+        .price { font-size: 32px; color: #ff3938; font-weight: bold; margin: 20px 0; text-align: center; padding: 20px; background: #fff; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .company-info { background-color: #110e2d; color: white; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .company-info h3 { color: #ff3938; margin-top: 0; }
+        .company-info a { color: #ff3938; text-decoration: none; font-weight: bold; }
+        .footer { margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd; font-size: 12px; color: #666; text-align: center; }
+        h2 { color: #110e2d; border-bottom: 2px solid #ff3938; padding-bottom: 10px; }
+        .thank-you { background: linear-gradient(135deg, #ff3938 0%, #d42f2f 100%); color: white; padding: 20px; border-radius: 5px; text-align: center; margin: 20px 0; }
+        .error-message { background-color: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; color: #856404; margin: 15px 0; }
+        .error-message strong { color: #721c24; }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1 style='margin: 0; font-size: 28px;'>✅ Děkujeme za Vaši poptávku!</h1>
+            <p style='margin: 10px 0 0 0; font-size: 16px;'>Vaše poptávka byla úspěšně přijata</p>
+        </div>
+
+        <div class='content'>
+            <div class='thank-you'>
+                <p style='margin: 0; font-size: 18px;'>🎉 Vaši poptávku jsme obdrželi a brzy se Vám ozveme s nabídkou!</p>
+            </div>
+
+            <h2>📐 Shrnutí Vaší poptávky</h2>
+            <div class='section'>
+                <div class='info-row'>
+                    <span class='label'>Typ stavby:</span>
+                    <span class='value'><strong>###STAVBATYP###</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Typ vazníku:</span>
+                    <span class='value'><strong>###VAZNIKTYP###</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Počet velkých otvorů:</span>
+                    <span class='value'><strong>###POCETVELKYCHOTVORU###</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Délka:</span>
+                    <span class='value'><strong>###DELKA### mm</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Šířka:</span>
+                    <span class='value'><strong>###SIRKA### mm</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Světlá výška stěn:</span>
+                    <span class='value'><strong>###SVETLAVYSKASTEM### mm</strong></span>
+                </div>
+                <div class='info-row'>
+                    <span class='label'>Celkový objem:</span>
+                    <span class='value'><strong>###OBJEM### m³</strong></span>
+                </div>
+            </div>
+
+            <h2>💰 Orientační cena</h2>
+            <div class='price'>
+                ###CENACELKEM###
+            </div>
+
+            ###POPIS###
+
+            <p style='text-align: center; color: #666; font-size: 14px; margin-top: 10px;'>
+                * Jedná se o orientační cenový odhad. Přesnou nabídku obdržíte po konzultaci s naším technikem.
+            </p>
+
+            <div class='company-info'>
+                <h3 style='margin-top: 0;'>📞 Kontaktujte nás</h3>
+                <div style='margin: 10px 0;'>
+                    <strong>Email:</strong> <a href='mailto:###COMPANYEMAIL###'>###COMPANYEMAIL###</a>
+                </div>
+                <div style='margin: 10px 0;'>
+                    <strong>Telefon:</strong> <a href='tel:###COMPANYPHONE###'>###COMPANYPHONE###</a>
+                </div>
+                <div style='margin: 15px 0 0 0; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);'>
+                    <p style='margin: 5px 0; font-size: 14px;'>###COMPANYNAME###</p>
+                    <p style='margin: 5px 0; font-size: 14px;'>###COMPANYADDRESS###</p>
+                </div>
+            </div>
+
+            <div style='background-color: #e8f5e9; padding: 15px; border-radius: 5px; border-left: 4px solid #4caf50; margin: 20px 0;'>
+                <p style='margin: 0; color: #2e7d32;'><strong>ℹ️ Co bude dál?</strong></p>
+                <p style='margin: 10px 0 0 0; color: #2e7d32;'>
+                    Náš technický specialista Vás bude kontaktovat do 24 hodin pro upřesnění detailů
+                    a přípravu přesné cenové nabídky. Budeme rádi, když nám můžete poskytnout
+                    další informace o Vašem projektu.
+                </p>
+            </div>
+
+            <div class='footer'>
+                <p>S pozdravem,<br><strong>Tým ###COMPANYNAME###</strong></p>
+                <p style='color: #999; margin-top: 15px;'>Datum: ###CURRENTDATE###</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

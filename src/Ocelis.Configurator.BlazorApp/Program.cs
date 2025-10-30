@@ -1,6 +1,7 @@
 using MudBlazor;
 using MudBlazor.Services;
 using Ocelis.Configuration.BlazorApp.Components;
+using Ocelis.Configuration.BlazorApp.Configuration;
 using Ocelis.Configuration.BlazorApp.Services;
 using Ocelis.Configurator.Application.Cenik;
 using Ocelis.Configurator.Application.Logic;
@@ -10,6 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add MudBlazor services
 builder.Services.AddMudServices();
+
+// Configure Email and Company settings
+var emailSettings = new EmailSettings();
+builder.Configuration.GetSection("Email").Bind(emailSettings);
+builder.Services.AddSingleton(emailSettings);
+
+var companySettings = new CompanySettings();
+builder.Configuration.GetSection("Company").Bind(companySettings);
+builder.Services.AddSingleton(companySettings);
 
 // Add Email service
 builder.Services.AddScoped<IEmailService, SmtpEmailService>();
