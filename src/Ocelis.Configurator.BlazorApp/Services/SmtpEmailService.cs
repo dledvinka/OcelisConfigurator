@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Text;
 using Ocelis.Configuration.BlazorApp.Configuration;
 using Ocelis.Configuration.BlazorApp.Domain;
+using Ocelis.Configuration.Domain.Extensions;
 
 public class SmtpEmailService : IEmailService
 {
@@ -135,15 +136,15 @@ public class SmtpEmailService : IEmailService
         htmlBody = htmlBody.Replace("###CUSTOMERPHONE###", customerPhone);
 
         // Zakazka basic info
-        htmlBody = htmlBody.Replace("###STAVBATYP###", zakazka.StavbaTyp.ToString());
-        htmlBody = htmlBody.Replace("###VAZNIKTYP###", zakazka.VaznikTyp.ToString());
+        htmlBody = htmlBody.Replace("###STAVBATYP###", zakazka.StavbaTyp.ToCzechDescription());
+        htmlBody = htmlBody.Replace("###VAZNIKTYP###", zakazka.VaznikTyp.ToCzechDescription());
         htmlBody = htmlBody.Replace("###POCETVELKYCHOTVORU###", zakazka.PocetVelkychOtvoru.ToString());
         htmlBody = htmlBody.Replace("###CPROFILTYP###", zakazka.CProfilTyp?.Kod ?? "N/A");
 
         // Dimensions
-        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Milimetry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Milimetry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Milimetry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Metry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Metry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Metry.ToString("N0", cultureInfo));
 
         // Price breakdown
         htmlBody = htmlBody.Replace("###CENAOCELOVAKONSTRUKCE###", (cena.CenaOcelovaKonstrukceOcelisCzk ?? 0).ToString("N0", cultureInfo));
@@ -174,14 +175,14 @@ public class SmtpEmailService : IEmailService
         var htmlBody = LoadEmailTemplate("Email_Template_Customer.html");
 
         // Zakazka limited info (only what customer should see)
-        htmlBody = htmlBody.Replace("###STAVBATYP###", zakazka.StavbaTyp.ToString());
-        htmlBody = htmlBody.Replace("###VAZNIKTYP###", zakazka.VaznikTyp.ToString());
+        htmlBody = htmlBody.Replace("###STAVBATYP###", zakazka.StavbaTyp.ToCzechDescription());
+        htmlBody = htmlBody.Replace("###VAZNIKTYP###", zakazka.VaznikTyp.ToCzechDescription());
         htmlBody = htmlBody.Replace("###POCETVELKYCHOTVORU###", zakazka.PocetVelkychOtvoru.ToString());
 
         // Dimensions
-        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Milimetry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Milimetry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Milimetry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Metry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Metry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Metry.ToString("N0", cultureInfo));
 
         // Price
         htmlBody = htmlBody.Replace("###CENACELKEM###", (cena.CenaCelkemCzk ?? 0).ToString("C0", cultureInfo));

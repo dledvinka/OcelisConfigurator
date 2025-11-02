@@ -13,6 +13,7 @@
 @using Ocelis.Configuration.BlazorApp.Services
 @using Ocelis.Configuration.Domain.Entities
 @using Ocelis.Configuration.Domain.Enums
+@using Ocelis.Configuration.Domain.Extensions
 @using Ocelis.Configurator.Application.Cenik
 @using Ocelis.Configurator.Application.Logic
 @using Ocelis.Configurator.Application.Materialy
@@ -219,19 +220,15 @@
         OnInputChanged();
     }
 
-    private static readonly List<DropDownItem> _stavbaTypItems = new List<DropDownItem>
-    {
-        new((int)StavbaTyp.RodinnyDum, "Rodinný dům"),
-        new((int)StavbaTyp.Vestavek, "Vestavek")
-    };
-    
-    private static readonly List<DropDownItem> _vaznikTypItems = new List<DropDownItem>
-    {
-        new((int)VaznikTyp.Plochy, "Plochý"),
-        new((int)VaznikTyp.SedlovySklon15, "Sedlová sklon 15°"),
-        new((int)VaznikTyp.SedlovySklon35, "Sedlová sklon 35°"),
-        new((int)VaznikTyp.SedlovySklon45, "Sedlová sklon 45°"),
-    };
+    private static readonly List<DropDownItem> _stavbaTypItems =
+        EnumExtensions.GetStavbaTypItems()
+            .Select(x => new DropDownItem((int)x.Value, x.Description))
+            .ToList();
+
+    private static readonly List<DropDownItem> _vaznikTypItems =
+        EnumExtensions.GetVaznikTypItems()
+            .Select(x => new DropDownItem((int)x.Value, x.Description))
+            .ToList();
 
     private readonly ConfiguratorFormInputData _model = ConfiguratorFormInputData.Default;
     private List<VaznikMaterial> _vaznikMaterialy;
