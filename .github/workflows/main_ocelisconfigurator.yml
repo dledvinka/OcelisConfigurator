@@ -69,4 +69,5 @@ jobs:
           app-name: 'OcelisConfigurator'
           slot-name: 'Production'
           package: .
+          clean: true
           
