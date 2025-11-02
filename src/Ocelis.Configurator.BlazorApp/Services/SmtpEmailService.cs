@@ -183,9 +183,6 @@ public class SmtpEmailService : IEmailService
         htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Milimetry.ToString("N0", cultureInfo));
         htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Milimetry.ToString("N0", cultureInfo));
 
-        var objem = (zakazka.Delka.Milimetry * zakazka.Sirka.Milimetry * zakazka.SvetlaVyskaSten.Milimetry) / 1_000_000_000;
-        htmlBody = htmlBody.Replace("###OBJEM###", objem.ToString("N2", cultureInfo));
-
         // Price
         htmlBody = htmlBody.Replace("###CENACELKEM###", (cena.CenaCelkemCzk ?? 0).ToString("C0", cultureInfo));
 

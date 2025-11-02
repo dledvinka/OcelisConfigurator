@@ -13,7 +13,15 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Email__SmtpHost": "wes1-smtp.wedos.net",
+        "Email__SmtpPort": "587",
+        "Email__SmtpUsername": "kontakt@hanelephoto.cz",
+        "Email__SmtpPassword": "Sp2782-cus",
+        "Email__FromEmail": "kontakt@hanelephoto.cz",
+        "Email__FromName": "Ocelis - Konfigurátor",
+        "Email__EnableSsl": "true",
+        "Email__ToEmail": "david.ledvinka@post.cz"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7257;http://localhost:5199"
