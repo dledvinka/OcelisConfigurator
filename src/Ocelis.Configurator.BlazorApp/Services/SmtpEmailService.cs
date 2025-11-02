@@ -142,9 +142,9 @@ public class SmtpEmailService : IEmailService
         htmlBody = htmlBody.Replace("###CPROFILTYP###", zakazka.CProfilTyp?.Kod ?? "N/A");
 
         // Dimensions
-        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Metry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Metry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Metry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Metry.ToString("N1", cultureInfo));
+        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Metry.ToString("N1", cultureInfo));
+        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Metry.ToString("N1", cultureInfo));
 
         // Price breakdown
         htmlBody = htmlBody.Replace("###CENAOCELOVAKONSTRUKCE###", (cena.CenaOcelovaKonstrukceOcelisCzk ?? 0).ToString("N0", cultureInfo));
@@ -180,9 +180,9 @@ public class SmtpEmailService : IEmailService
         htmlBody = htmlBody.Replace("###POCETVELKYCHOTVORU###", zakazka.PocetVelkychOtvoru.ToString());
 
         // Dimensions
-        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Metry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Metry.ToString("N0", cultureInfo));
-        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Metry.ToString("N0", cultureInfo));
+        htmlBody = htmlBody.Replace("###DELKA###", zakazka.Delka.Metry.ToString("N1", cultureInfo));
+        htmlBody = htmlBody.Replace("###SIRKA###", zakazka.Sirka.Metry.ToString("N1", cultureInfo));
+        htmlBody = htmlBody.Replace("###SVETLAVYSKASTEM###", zakazka.SvetlaVyskaSten.Metry.ToString("N1", cultureInfo));
 
         // Price
         htmlBody = htmlBody.Replace("###CENACELKEM###", (cena.CenaCelkemCzk ?? 0).ToString("C0", cultureInfo));

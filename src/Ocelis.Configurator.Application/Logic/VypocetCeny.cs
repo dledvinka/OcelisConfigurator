@@ -19,8 +19,11 @@ public class VypocetCeny
     
     public ZakazkaCena VypoctiCenuZakazky(Zakazka zakazka)
     {
-        // TODO DL validace při výpočtu
-        
+        if (zakazka.Delka > Vzdalenost.FromMetry(8) || zakazka.Sirka > Vzdalenost.FromMetry(8))
+        {
+            return ZakazkaCena.NelzeVypocitat("Rozměry stavby větší než 8m vyžadují individuální konzultaci s naším technikem.");
+        }
+
         try
         {
             var koeficientRoztece = GetRoztec(zakazka.StavbaTyp);
@@ -80,20 +83,6 @@ public class VypocetCeny
         // takto je to ve zdrojovém VBA scriptu
         var roz = koeficientRoztece == 2 ? 0.5 : 0.625;
         
-        // vysledek_stena = ((delka_sten * 3 + (vyska * delka_sten * roztec)) + (delka_sten / 2.5) * vyska)
-        // Range("B2").Value = (Sqr((roz * roz) + (vyska / 4) * (vyska / 4)) * 4 * 1.5) * (delka_sten / 2.5)
-        // (
-        // Sqr(
-        // (roz * roz) + (vyska / 4) * (vyska / 4)
-        // )
-        // * 4 * 1.5
-        // ) * (delka_sten / 2.5)
-        // vysledek_stena = vysledek_stena + (Sqr((roz * roz) + (vyska / 4) * (vyska / 4)) * 4) * (delka_sten / 2.5)
-        //
-        //
-        // Range("B1").Value = vysledek_stena * material
-        // Steny = vysledek_stena * material
-
         var vysledekStena = 3 * delkaStenMetry + koeficientRoztece * svetlaVyskaStenMetry * delkaStenMetry + delkaStenMetry / 2.5 * svetlaVyskaStenMetry;
         var rangeB2 = Math.Sqrt(roz * roz + svetlaVyskaStenMetry / 4 * (svetlaVyskaStenMetry / 4)) * 4 * 1.5 * (delkaStenMetry / 2.5);
         vysledekStena += Math.Sqrt(roz * roz + svetlaVyskaStenMetry / 4 * (svetlaVyskaStenMetry / 4)) * 4 * (delkaStenMetry / 2.5);

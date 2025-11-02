@@ -89,7 +89,14 @@
 
                     <div class="mt-6 mb-6">
                         <MudText Typo="Typo.h5" GutterBottom="true">Odhad výsledné ceny:</MudText>
-                        <MudText Typo="Typo.h4" Color="Color.Primary">@_priceEstimate.ToString("C0", _cultureInfo)</MudText>
+                        @if (_priceEstimate.HasValue)
+                        {
+                            <MudText Typo="Typo.h4" Color="Color.Primary">@_priceEstimate?.ToString("C0", _cultureInfo)</MudText>
+                        }
+                        else
+                        {
+                            <MudText Typo="Typo.h5" Color="Color.Primary">@_priceMessage</MudText>
+                        }
                     </div>
 
                     <MudText Typo="Typo.h5" Class="mb-4">Zanechte nám na sebe kontakt</MudText>
@@ -126,7 +133,7 @@
 @code {
 
     bool success;
-    decimal _priceEstimate = 0.0m;
+    decimal? _priceEstimate;
     CultureInfo _cultureInfo = new CultureInfo("cs-CZ");
 
     private void OnInputChanged()
@@ -163,7 +170,8 @@
         }
         else
         {
-            // TODO DL: show error message that price cannot be calculated
+            _priceEstimate = null;
+            _priceMessage = _zakazkaCena.Popis;
         }
         
     }
@@ -235,6 +243,7 @@
     private Cenik _cenik;
     private ZakazkaCena _zakazkaCena;
     private Zakazka _zakazka;
+    private string _priceMessage;
 
     public class ConfiguratorFormInputData
     {
