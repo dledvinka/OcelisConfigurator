@@ -39,7 +39,7 @@
                     <MudText Typo="Typo.h5" Class="mb-4">Zadejte požadované rozměry, typ stavby a sklon střechy</MudText>
 
                     <MudSelect @bind-Value="_model.StavbaTyp"
-                    @bind-Value:after="OnInputChanged"
+                    @bind-Value:after="OnStavbaTypChanged"
                     Label="Typ stavby"
                     Margin="Margin.Normal">
                         @foreach (var dropDownItem in _stavbaTypItems)
@@ -52,7 +52,7 @@
                     @bind-Value:after="OnInputChanged"
                     Label="Sklon střechy"
                     Margin="Margin.Normal">
-                        @foreach (var dropDownItem in _vaznikTypItems)
+                        @foreach (var dropDownItem in AvailableVaznikTypItems)
                         {
                             <MudSelectItem Value="@dropDownItem">@dropDownItem.DisplayText</MudSelectItem>
                         }
@@ -135,6 +135,35 @@
     bool success;
     decimal? _priceEstimate;
     CultureInfo _cultureInfo = new CultureInfo("cs-CZ");
+
+    private List<DropDownItem> AvailableVaznikTypItems
+    {
+        get
+        {
+            // If Vestavek is selected, only allow Plochy
+            if (_model.StavbaTyp.Id == (int)StavbaTyp.Vestavek)
+            {
+                return _vaznikTypItems
+                    .Where(x => x.Id == (int)VaznikTyp.Plochy)
+                    .ToList();
+            }
+
+            // Otherwise, allow all VaznikTyp options
+            return _vaznikTypItems;
+        }
+    }
+
+    private void OnStavbaTypChanged()
+    {
+        // If Vestavek is selected and current VaznikTyp is not Plochy, reset to Plochy
+        if (_model.StavbaTyp.Id == (int)StavbaTyp.Vestavek &&
+            _model.VaznikTyp.Id != (int)VaznikTyp.Plochy)
+        {
+            _model.VaznikTyp = _vaznikTypItems.First(x => x.Id == (int)VaznikTyp.Plochy);
+        }
+
+        OnInputChanged();
+    }
 
     private void OnInputChanged()
     {
