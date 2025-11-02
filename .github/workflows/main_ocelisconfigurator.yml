@@ -7,11 +7,18 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'docs/**'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./src 
+
     permissions:
       contents: read #This is required for actions/checkout
 
