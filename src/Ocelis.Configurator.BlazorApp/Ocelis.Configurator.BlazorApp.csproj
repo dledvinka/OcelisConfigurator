@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
     <PackageReference Include="MudBlazor" Version="8.*" />
     <PackageReference Include="SendGrid" Version="9.29.3" />
   </ItemGroup>

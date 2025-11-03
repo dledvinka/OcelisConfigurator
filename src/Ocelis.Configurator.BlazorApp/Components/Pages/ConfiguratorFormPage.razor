@@ -6,6 +6,8 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 @inject ILoggerFactory LoggerFactory
+@inject ILogger<ConfiguratorFormPage> Logger
+@inject Microsoft.ApplicationInsights.TelemetryClient TelemetryClient
 @using System.ComponentModel.DataAnnotations
 @using System.Globalization
 @using Ocelis.Configuration.BlazorApp.Components.Shared
@@ -215,6 +217,9 @@
         _isSubmitting = true;
         StateHasChanged();
 
+        Logger.LogInformation("Form submission started. Email: {Email}, Phone: {Phone}, Price: {Price} CZK",
+            _model.Email, _model.PhoneNumber, _priceEstimate);
+
         try
         {
             // Send email with all form data
@@ -229,15 +234,39 @@
             if (emailSent)
             {
                 success = true;
+
+                // Track custom metrics for business reporting
+                TelemetryClient.TrackEvent("InquirySubmitted", new Dictionary<string, string>
+                {
+                    { "CustomerEmail", _model.Email },
+                    { "CustomerPhone", _model.PhoneNumber },
+                    { "StavbaTyp", _model.StavbaTyp.DisplayText },
+                    { "VaznikTyp", _model.VaznikTyp.DisplayText },
+                    { "Delka", _model.DelkaStavbyVMetrech.ToString() },
+                    { "Sirka", _model.SirkaStavbyVMetrech.ToString() },
+                    { "Vyska", _model.SvetlaVyskaStenVMetrech.ToString() }
+                });
+
+                if (_priceEstimate.HasValue)
+                {
+                    TelemetryClient.TrackMetric("OrderValue", (double)_priceEstimate.Value);
+                }
+
+                Logger.LogInformation("Inquiry submitted successfully. Email: {Email}, Price: {Price} CZK",
+                    _model.Email, _priceEstimate);
+
                 Snackbar.Add("Děkujeme! Vaše poptávka byla úspěšně odeslána. Náš obchodní zástupce se Vám brzy ozve.", Severity.Success);
             }
             else
             {
+                Logger.LogWarning("Email send failed for customer {Email}", _model.Email);
                 Snackbar.Add("Omlouváme se, ale při odesílání poptávky došlo k chybě. Zkuste to prosím později nebo nás kontaktujte přímo.", Severity.Error);
             }
         }
         catch (Exception ex)
         {
+            Logger.LogError(ex, "Form submission failed. Email: {Email}, Phone: {Phone}, Price: {Price} CZK",
+                _model.Email, _model.PhoneNumber, _priceEstimate);
             Snackbar.Add($"Nepodařilo se odeslat poptávku. Chyba: {ex.Message}", Severity.Error);
         }
         finally
@@ -249,12 +278,16 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Logger.LogInformation("Loading configurator data...");
+
         var uri = NavigationManager.ToAbsoluteUri("data/Materialy.csv");
         var csvFileStream = await HttpClient.GetStreamAsync(uri);
         _vaznikMaterialy = await VaznikMaterialyReader.ReadAsync(csvFileStream);
         _cenik = CenikReader.GetCenik();
 
         OnInputChanged();
+
+        Logger.LogInformation("Configurator initialized successfully. Materials: {MaterialCount}", _vaznikMaterialy.Count);
     }
 
     private static readonly List<DropDownItem> _stavbaTypItems =

@@ -9,6 +9,9 @@ using Ocelis.Configurator.Application.Materialy;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Application Insights telemetry
+builder.Services.AddApplicationInsightsTelemetry();
+
 // Add MudBlazor services
 builder.Services.AddMudServices();
 
