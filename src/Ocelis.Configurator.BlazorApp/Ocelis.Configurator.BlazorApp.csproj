@@ -26,11 +26,16 @@
     <Content Update="wwwroot\data\Materialy.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="Email_Template_Manager.html">
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Email_Template_Manager.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="Email_Template_Customer.html">
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </None>
+    <None Include="Email_Template_Customer.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 </Project>
