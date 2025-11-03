@@ -14,15 +14,18 @@ public class SmtpEmailService : IEmailService
     private readonly CompanySettings _companySettings;
     private readonly EmailSettings _emailSettings;
     private readonly ILogger<SmtpEmailService> _logger;
+    private readonly IWebHostEnvironment _environment;
 
     public SmtpEmailService(
         EmailSettings emailSettings,
         CompanySettings companySettings,
-        ILogger<SmtpEmailService> logger)
+        ILogger<SmtpEmailService> logger,
+        IWebHostEnvironment environment)
     {
         _emailSettings = emailSettings;
         _companySettings = companySettings;
         _logger = logger;
+        _environment = environment;
     }
 
     public bool IsValidEmail(string emailName) => new EmailAddressAttribute().IsValid(emailName);
@@ -110,15 +113,29 @@ public class SmtpEmailService : IEmailService
     {
         try
         {
-            var templatePath = Path.Combine(Directory.GetCurrentDirectory(), templateName);
+            var templatePath = Path.Combine(_environment.ContentRootPath, templateName);
+
+            _logger.LogInformation("Loading email template from: {TemplatePath}", templatePath);
+
+            if (!File.Exists(templatePath))
+            {
+                _logger.LogError("Email template file not found at: {TemplatePath}", templatePath);
+                throw new FileNotFoundException($"Email template not found: {templatePath}", templatePath);
+            }
 
             using var fs = File.Open(templatePath, FileMode.Open, FileAccess.Read);
             using var sr = new StreamReader(fs);
-            return sr.ReadToEnd();
+            var content = sr.ReadToEnd();
+
+            _logger.LogInformation("Email template loaded successfully: {TemplateName}, Length: {Length} characters",
+                templateName, content.Length);
+
+            return content;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading email template from {TemplatePath}", templateName);
+            _logger.LogError(ex, "Error loading email template from {TemplateName}. ContentRootPath: {ContentRootPath}",
+                templateName, _environment.ContentRootPath);
             throw;
         }
     }
